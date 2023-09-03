@@ -48,6 +48,7 @@ def setup_model():
     
     # Create simple structure
         # GaFra shall only use this as input
+        # Return the structure to GaFra
     UB_127x76x13.setDefault();
     S355.setDefault();
     Bm1 = StraightBeam(Point(0 m,0 m,5 m), Point(5 m,0 m,5 m));
@@ -67,7 +68,10 @@ def setup_model():
     Bm12 = StraightBeam(Point(5 m,5 m,5 m), Point(0 m,5 m,0 m));
     Bm13 = StraightBeam(Point(0 m,0 m,5 m), Point(5 m,5 m,5 m));
     Bm14 = StraightBeam(Point(5 m,0 m,5 m), Point(0 m,5 m,5 m));
-    Create fixed support points at base
+    # if there is no built-in genie function to return all above members, then
+    # we can create a list of all members and return it to GaFra
+    
+    # Create fixed support points at base
     Sp1 = SupportPoint(Point(5 m,0 m,0 m));
     Sp2 = SupportPoint(Point(0 m,0 m,0 m));
     Sp3 = SupportPoint(Point(5 m,5 m,0 m));
@@ -112,3 +116,6 @@ def setup_model():
     AISC_Member_check.executeCodeChecks();
     Analysis1.setActive();
     LC1.setActive();
+    
+    # return all members to GaFra
+    return [Bm1, Bm2, Bm3, Bm4, Bm5, Bm6, Bm7, Bm8, Bm9, Bm10, Bm11, Bm12, Bm13, Bm14]

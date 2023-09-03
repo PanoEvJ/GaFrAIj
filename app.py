@@ -1,12 +1,12 @@
 import setup_model
-import cross_section_library
+import cross_sections as cs
 
-setup_model()
-sections = get_available_sections()
+members = setup_model()
+sections = cs.get_available_sections()
 
+# this is the optimization process from gafra
+for member in members:
+    for section in sections:
+        member.section = section;
 
-
-
-Bm13.section = UB_178x102x19;
-
-Bm14.section = UB_178x102x19;
+        # run genie analysis

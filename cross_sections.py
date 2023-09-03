@@ -1,8 +1,8 @@
-# This library shall be used from GaFra to select appropriate section sizes for the code checks – Parameter 1
-# THERE MUST BE a Geinie python function that returns a list of all available sections
-# For now we jsut use a custom list    
+# all Genie's library cross sections
 
 def get_available_sections():
+    # THERE MUST BE a Geinie python function that returns a list of all available sections in their library
+    # For now we just use a custom list    
     return list(UB_127x76x13,
                 UB_127x76x13,
                 UB_127x76x13,
@@ -14,5 +14,4 @@ def get_available_sections():
                 UB_203x133x25,
                 UB_203x133x25,
                 UB_203x133x25)
-
 

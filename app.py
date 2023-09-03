@@ -1,4 +1,9 @@
-import genie_kernel as genie
+import setup_model
+import cross_section_library
+
+setup_model()
+sections = get_available_sections()
+
 
 
 

@@ -1,1 +1,3 @@
 # GaFrAIj
+
+![](screenshots/gafraij.jpeg)

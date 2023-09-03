@@ -15,7 +15,6 @@ def setup_model():
     GenieRules.Units.setInputUnit(Length, "m");
     GenieRules.Units.setInputUnit(Force, "kN");
     GenieRules.Units.setInputUnit(TempDiff, "delC");
-    
     # Creating guiding points (user input)  
     Point1 = Point(0, 0, 0);
     Point2 = Point(0, 0, 5);
@@ -25,14 +24,12 @@ def setup_model():
     Point6 = Point2.copyTranslate(Vector3d(5, 0, 0));
     Point7 = Point3.copyTranslate(Vector3d(5, 0, 0));
     Point8 = Point4.copyTranslate(Vector3d(5, 0, 0));
-
     # Include material
         #This can be another parameter for GaFra but fro simplicity lets keep S355 steel for now
     S355 = MaterialLinear(355000, 7.85 tonne/m^3, 210000000 kPa, 0.3, 1.2e-05 delC^-1, 3e-05 kN*s/m);
     S355.damping = 3e-05
     S275 = MaterialLinear(275000, 7.85 tonne/m^3, 210000000 kPa, 0.3, 1.2e-05 delC^-1, 3e-05 kN*s/m);
     S275.damping = 3e-05
-
     # Create loads and loadcombinations
         # GaFra shall only use this as input
     Gravity = LoadCase();
@@ -45,7 +42,6 @@ def setup_model():
     LC1.addCase(Load, 1.3);
     LC1.convertLoadToMass = false;
     LC1.EquipmentRep = EquipmentAsLineLoads;   
-    
     # Create simple structure
         # GaFra shall only use this as input
         # Return the structure to GaFra
@@ -68,24 +64,43 @@ def setup_model():
     Bm12 = StraightBeam(Point(5 m,5 m,5 m), Point(0 m,5 m,0 m));
     Bm13 = StraightBeam(Point(0 m,0 m,5 m), Point(5 m,5 m,5 m));
     Bm14 = StraightBeam(Point(5 m,0 m,5 m), Point(0 m,5 m,5 m));
-    # if there is no built-in genie function to return all above members, then
-    # we can create a list of all members and return it to GaFra
-    
     # Create fixed support points at base
     Sp1 = SupportPoint(Point(5 m,0 m,0 m));
     Sp2 = SupportPoint(Point(0 m,0 m,0 m));
     Sp3 = SupportPoint(Point(5 m,5 m,0 m));
     Sp4 = SupportPoint(Point(0 m,5 m,0 m));
-
     # Include load at loadcase ‘Load’
     Load.setActive();
     PLoad1 = PointLoad(Load, FootprintPoint(Point(2.5 m,2.5 m,5 m)), PointForceMoment(Vector3d(0 kN, 0 kN, -10 kN), Vector3d(0 kN*m, 0 kN*m, 0 kN*m)));
-    Create and run analysis
+    # Create and run analysis
     Analysis1 = Analysis(true);
     Analysis1.add(MeshActivity());
     Analysis1.add(LinearAnalysis());
     Analysis1.step(2).useSestra10(true);
     Analysis1.add(LoadResultsActivity());
+    
+    # return all members to GaFra
+    # THERE MUST BE a Genie python function to return all members and their cross-section specifications
+    # ...for now we just return a hard-typed dictionary of all members and their cross-sections
+    return [{"member": Bm1, "section": UB_127x76x13},
+            {"member": Bm2, "section": UB_127x76x13},
+            {"member": Bm3, "section": UB_127x76x13},
+            {"member": Bm4, "section": UB_127x76x13},
+            {"member": Bm5, "section": UC_152x152x23},
+            {"member": Bm6, "section": UC_152x152x23},
+            {"member": Bm7, "section": UC_152x152x23},
+            {"member": Bm8, "section": UC_152x152x23},
+            {"member": Bm9, "section": UB_152x89x16},
+            {"member": Bm10, "section": UB_152x89x16},
+            {"member": Bm11, "section": UB_152x89x16},
+            {"member": Bm12, "section": UB_152x89x16},
+            {"member": Bm13, "section": UB_127x76x13},
+            {"member": Bm14, "section": UB_127x76x13}
+           ]
+    
+
+def run_analysis():
+    # run analysis    
     Analysis1.setActive();
     Analysis1.step(1).step(1).execute();
     Analysis1.step(1).step(2).execute();
@@ -117,5 +132,7 @@ def setup_model():
     Analysis1.setActive();
     LC1.setActive();
     
-    # return all members to GaFra
-    return [Bm1, Bm2, Bm3, Bm4, Bm5, Bm6, Bm7, Bm8, Bm9, Bm10, Bm11, Bm12, Bm13, Bm14]
+    # retrieve code checks
+    # THERE MUST BE a genie function to return code checks
+    # ...for now we return a None variable
+    return code_checks
